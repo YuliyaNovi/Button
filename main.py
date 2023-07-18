@@ -85,3 +85,33 @@ if __name__ == '__main__':
 
     for proc in procs:
         proc.join()
+
+
+import threading
+
+
+def print_cube(num):
+    """
+    Вычисляет куб от заданного числа num
+    """
+    print(f'Куб {num} -> {num * num * num}')
+
+
+def print_squre(num):
+    """
+    Вычисляет квадрат от заданного числа num
+    """
+    print(f'Квадрат {num} -> {num ** 2}')
+
+if  __name__ == '__main__':
+    # создаем два потока
+    thread1 = threading.Thread(target=print_squre, args=(10,))
+    thread2 = threading.Thread(target=print_cube, args=(10,))
+
+    thread1.start()  # запуск первого потока
+    thread2.start()  # запуск второго потока
+
+    thread1.join()  # ожидание пока поток 1 завершится
+    thread2.join()  # ожидание пока поток 2 завершится
+
+    print('Процессы завершены')
