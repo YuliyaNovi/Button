@@ -50,16 +50,38 @@
 # print(quotes)
 # https://ngrok.com/
 
-import os
-from flask import Flask
+# import os
+# from flask import Flask
+#
+#
+# app = Flask(__name__)
+#
+# @app.route('/')
+# def index():
+#     return 'Flask приветствует вас'
+#
+# if __name__=='__main__':
+#     port = int(os.environ.get('PORT', 5000))
+#     app.run(host='0.0.0.0', port=port)
 
 
-app = Flask(__name__)
+from multiprocessing import Process
 
-@app.route('/')
-def index():
-    return 'Flask приветствует вас'
 
-if __name__=='__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+def print_func(continent='Asia'):
+    print(f'Это -{continent}.')
+
+if __name__ == '__main__':
+    names = ['America', 'Europe', 'Africa']
+    procs = []
+    proc = Process(target=print_func)
+    procs.append(proc)
+    proc.start()
+
+    for name in names:
+        proc = Process(target=print_func, args=(name,))
+        procs.append(proc)
+        proc.start()
+
+    for proc in procs:
+        proc.join()
