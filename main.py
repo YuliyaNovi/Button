@@ -64,54 +64,70 @@
 #     port = int(os.environ.get('PORT', 5000))
 #     app.run(host='0.0.0.0', port=port)
 
+#
+# from multiprocessing import Process
+#
+#
+# def print_func(continent='Asia'):
+#     print(f'Это -{continent}.')
+#
+# if __name__ == '__main__':
+#     names = ['America', 'Europe', 'Africa']
+#     procs = []
+#     proc = Process(target=print_func)
+#     procs.append(proc)
+#     proc.start()
+#
+#     for name in names:
+#         proc = Process(target=print_func, args=(name,))
+#         procs.append(proc)
+#         proc.start()
+#
+#     for proc in procs:
+#         proc.join()
+#
+#
+# import threading
+#
+#
+# def print_cube(num):
+#     """
+#     Вычисляет куб от заданного числа num
+#     """
+#     print(f'Куб {num} -> {num * num * num}')
+#
+#
+# def print_squre(num):
+#     """
+#     Вычисляет квадрат от заданного числа num
+#     """
+#     print(f'Квадрат {num} -> {num ** 2}')
+#
+# if  __name__ == '__main__':
+#     # создаем два потока
+#     thread1 = threading.Thread(target=print_squre, args=(10,))
+#     thread2 = threading.Thread(target=print_cube, args=(10,))
+#
+#     thread1.start()  # запуск первого потока
+#     thread2.start()  # запуск второго потока
+#
+#     thread1.join()  # ожидание пока поток 1 завершится
+#     thread2.join()  # ожидание пока поток 2 завершится
+#
+#     print('Процессы завершены')
 
-from multiprocessing import Process
 
+def print_name(prefix):
+    print(f'Ищем префикс {prefix}')
+    try:
+        while True:
+            name = (yield)
+            if prefix in name:
+                print(name)
+    except GeneratorExit:
+        print('Корутина (coroutine) завершена')
 
-def print_func(continent='Asia'):
-    print(f'Это -{continent}.')
-
-if __name__ == '__main__':
-    names = ['America', 'Europe', 'Africa']
-    procs = []
-    proc = Process(target=print_func)
-    procs.append(proc)
-    proc.start()
-
-    for name in names:
-        proc = Process(target=print_func, args=(name,))
-        procs.append(proc)
-        proc.start()
-
-    for proc in procs:
-        proc.join()
-
-
-import threading
-
-
-def print_cube(num):
-    """
-    Вычисляет куб от заданного числа num
-    """
-    print(f'Куб {num} -> {num * num * num}')
-
-
-def print_squre(num):
-    """
-    Вычисляет квадрат от заданного числа num
-    """
-    print(f'Квадрат {num} -> {num ** 2}')
-
-if  __name__ == '__main__':
-    # создаем два потока
-    thread1 = threading.Thread(target=print_squre, args=(10,))
-    thread2 = threading.Thread(target=print_cube, args=(10,))
-
-    thread1.start()  # запуск первого потока
-    thread2.start()  # запуск второго потока
-
-    thread1.join()  # ожидание пока поток 1 завершится
-    thread2.join()  # ожидание пока поток 2 завершится
-
-    print('Процессы завершены')
+corou = print_name('Уважаемый')
+corou.__next__()
+corou.send('товарищ')
+corou.send('Уважаемый товарищ')
