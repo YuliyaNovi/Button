@@ -134,42 +134,79 @@
 
 
 # asyncio - модуль асинхронного программирования, кторый был представлен в Python
+#
+# import signal
+# import sys
+# import json
+# import asyncio
+# import aiohttp
+#
+# loop = asyncio.get_event_loop()
+# client = aiohttp.ClientSession(loop=loop)
+#
+# async def get_json(client, url):
+#     async with client.get(url) as response:
+#         assert response.status == 200
+#         return await response.read()
+#         # except_AssertionError:
+#
+# async def get_reddit_top(subreddit, client):
+#     url = 'https://www.reddit.com/r/' + subreddit + '/top.json?sort=top&t=day&limit=5'
+#     print(url)
+#     data1 = await get_json(client, url)
+#     j = json.loads(data1.decode('utf-8'))
+#     for i in j['data']['children']:
+#         score = i['data']['score']
+#         title = i['data']['title']
+#         link = i['data']['url']
+#         print(str(score) + ': ' + title + ' (' + link + ')')
+#     print('Готово:', subreddit + '\n')
+#
+# def signal_handler(signal, frame):
+#     loop.stop()
+#     client.close()
+#     sys.exit(0)
+#
+# signal.signal(signal.SIGINT, signal_handler)
+#
+# # asyncio.ensure_future(get_reddit_top('python', client))
+# asyncio.ensure_future(get_reddit_top('programming', client))
+# asyncio.ensure_future(get_reddit_top('compsci', client))
+# loop.run_forever()
+#
+# from lib import count_word_at_url
+# from redis import Redis
+# from rq import Queue
+#
+#
+#
+# q = Queue(connection=Redis())
+# job = q.enqueue(count_word_at_url, 'https://quotes.toscrape.com/')
 
-import signal
-import sys
-import json
-import asyncio
-import aiohttp
+# Асинхронное программирование
 
-loop = asyncio.get_event_loop()
-client = aiohttp.ClientSession(loop=loop)
 
-async def get_json(client, url):
-    async with client.get(url) as response:
-        assert response.status == 200
-        return await response.read()
-        # except_AssertionError:
+import time
+from datetime import datetime
 
-async def get_reddit_top(subreddit, client):
-    url = 'https://www.reddit.com/r/' + subreddit + '/top.json?sort=top&t=day&limit=5'
-    print(url)
-    data1 = await get_json(client, url)
-    j = json.loads(data1.decode('utf-8'))
-    for i in j['data']['children']:
-        score = i['data']['score']
-        title = i['data']['title']
-        link = i['data']['url']
-        print(str(score) + ': ' + title + ' (' + link + ')')
-    print('Готово:', subreddit + '\n')
+def dish(num, prepare, wait):
+    """
 
-def signal_handler(signal, frame):
-    loop.stop()
-    client.close()
-    sys.exit(0)
+    num: номер блюда по порядку
+    prepare: время на подготовку
+    wait: ожидание готовности
+    """
 
-signal.signal(signal.SIGINT, signal_handler)
+    print(f'{datetime.now().strftime("%H:%M:%S")} - подготовка к приготовлению блюда {num} - {prepare} мин')
+    time.sleep(prepare)
+    print(f'Начало приготовления {num} - {datetime.now().strftime("%H:%M:%S")}. Ожидание блюда {num} : {wait} мин')
+    time.sleep(prepare)
+    print(f'В {datetime.now().strftime("%H:%M:%S")} блюдо {num} готово.')
 
-# asyncio.ensure_future(get_reddit_top('python', client))
-asyncio.ensure_future(get_reddit_top('programming', client))
-asyncio.ensure_future(get_reddit_top('compsci', client))
-loop.run_forever()
+t0 = time.time()  # время начала работы
+dish(1, 2, 3)
+dish(2, 5, 10)
+dish(3, 3, 5)
+delta = int(time.time() - t0)  # затраченное время
+print(f'В {datetime.now().strftime("%H:%M:%S")} мы закончили')
+print(f'Затрачено время - {delta}')
